@@ -1,10 +1,10 @@
 Move  = [ ( 0, 1), ( 1, 0), ( 0,-1), (-1, 0) ]
 
 arrow = {
-	( 0, 1) : "NORTH",
-	( 1, 0) : "EAST",
-	( 0,-1) : "SOUTH",
-	(-1, 0) : "WEST"
+	( 0, 1) : "NORTH ↑",
+	( 1, 0) : "EAST →",
+	( 0,-1) : "SOUTH ↓ ",
+	(-1, 0) : "WEST ←"
 }
 
 NORTH = 0
@@ -26,5 +26,5 @@ GREEN 	= (0, 255, 0)
 RED 	= (255, 0, 0)
 PURPLE 	= (255, 0, 255)
 
-Screen_Width = 600
-Screen_Height = 600
+Screen_Width = 660
+Screen_Height = 660

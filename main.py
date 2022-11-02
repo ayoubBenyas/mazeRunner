@@ -1,25 +1,26 @@
 from utils import *
 from maze import Maze
 from player import Agent
-from app import App
-from room import Room
+from app import App, Room
+from const import arrow 
 
 matrix = readMap("maze.map")
-
 startPosition = findStartPosition( matrix)
- 
-maze = Maze(matrix, startPosition)
+
+#board game preparation
+maze = Maze( matrix, startPosition)
+room = Room( maze)
+game = App( room)
 
 player = Agent(maze)
 solved = player.go()
 
-print(solved)
+directions = player.getDirections()
 
+if solved :
+    optimizedDirections = optimizePath(directions)
+    pathPositions = makePath(maze, optimizedDirections)
+    print( list(map(lambda d: arrow[d], optimizedDirections)) )
+    room.addPath( pathPositions)
 
-path = player.optimizePath().makePath()
-
-room= Room( maze)
-room.addPath(path)
-
-game  = App(room, solved)
-game.run( solved)
+game.display( solved)

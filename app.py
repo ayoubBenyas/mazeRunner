@@ -1,10 +1,64 @@
 import pygame
-import maze
 import const
 
+class Block(pygame.sprite.Sprite):
+	"""This class represents the bar at the bottom that the player controls """
+ 
+	def __init__(self, x, y, mazeWidth, height, color):
+		""" Constructor function """
+ 
+		# Call the parent's constructor
+		super().__init__()
+ 
+		# Make a BLUE wall, of the size specified in the parameters
+		self.image = pygame.Surface([mazeWidth, height])
+		self.image.fill(color)
+ 
+		# Make our top-left corner the passed-in location.
+		self.rect = self.image.get_rect()
+		self.rect.y = y
+		self.rect.x = x
+
+class Room(object):
+
+	""" Base class for all rooms. """
+ 
+	# Each room has a list of walls, and of enemy sprites.
+	
+	wall_list = None
+	solution_list = None
+	
+	cell_Width = None
+	cell_Height = None
+
+	def __init__(self, Maze, Path = []):
+		""" Constructor, create our lists. """
+		self.wall_list = pygame.sprite.Group()
+		self.solution_list = pygame.sprite.Group()
+		
+		mazeWidth, mazeHight = Maze.getMatrix().shape
+		
+		self.cell_Width = const.Screen_Width // mazeWidth
+		self.cell_Height = const.Screen_Height // mazeHight
+		
+		matrix = Maze.getMatrix()
+
+		for y in range(mazeHight):
+			for x in range(mazeWidth):
+				if matrix[y][x] == 1 :
+					block = Block( x*self.cell_Width, y*self.cell_Height, self.cell_Width, self.cell_Height, const.BLACK )
+					self.wall_list.add(block)
+
+	def addPath(self, path):
+		pW = self.cell_Width *.1
+		pH = self.cell_Height *.1
+		for loc in path:
+			block = Block( loc[1]*self.cell_Width +pW, loc[0]*self.cell_Height +pW, self.cell_Width -pW*2, self.cell_Height -pW*2, const.GREEN )
+			self.solution_list.add(block)
 
 class App(object):
-	def __init__(self, Room,  appName = 'Maze Runner'):
+
+	def __init__(self, room,  appName = 'Maze Runner'):
 		# Call this function so the Pygame library can initialize itself
 		pygame.init()
 	
@@ -17,7 +71,7 @@ class App(object):
 		
 		self.movingsprites = pygame.sprite.Group()
 	
-		self.current_room =  Room
+		self.current_room =  room
 		
 		font = pygame.font.SysFont("comicsansms", 100)
 
@@ -25,10 +79,10 @@ class App(object):
 
 		self.clock = pygame.time.Clock()
 
-	def run(self, solved, path=[]):
+	def display(self, solved):
 		""" Main Program """
 		
-		self.current_room.addPath( path)
+		#self.current_room.addPath( path)
 		dsiplay_path = False
 
 
@@ -46,16 +100,14 @@ class App(object):
 			self.screen.fill(const.RED)
 			self.movingsprites.draw( self.screen)
 			self.current_room.wall_list.draw( self.screen)
-			
-			if dsiplay_path:
-				self.current_room.solution_list.draw( self.screen)
-			
+
 			if not solved:
 				textRect = self.text.get_rect()  
 				textRect.center = (const.Screen_Width // 2, const.Screen_Height // 2) 
-				self.screen.blit(self.text,textRect)
+				self.screen.blit( self.text ,textRect)
 				#done = True
-
+			elif dsiplay_path:
+				self.current_room.solution_list.draw( self.screen)
 			pygame.display.flip()
 	
 			#self.clock.tick(20)
