@@ -11,6 +11,22 @@ def findStartPosition(npArray):
     startPosition = (positions[0][0], positions[1][0]) # first find position
     return startPosition
 
+def getIntialDirection(maze):
+    (width, height) = maze.getMatrix().shape
+    startPosition = maze.getStart()
+    print( (width, height))
+    print(startPosition)
+    if startPosition[0] == 0 :
+        return const.SOUTH
+    elif startPosition[1] == 0 :
+        return const.EAST
+    elif startPosition[0] == height - 1 :
+        return const.NORTH
+    elif startPosition[1] == width - 1 :
+        return const.WEST
+    else :
+        return None
+
 def optimizePath(directions):
     '''
     #Second optimization

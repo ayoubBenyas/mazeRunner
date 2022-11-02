@@ -11,8 +11,10 @@ startPosition = findStartPosition( matrix)
 maze = Maze( matrix, startPosition)
 room = Room( maze)
 game = App( room)
-
-player = Agent(maze)
+ 
+intialDirection = getIntialDirection(maze)
+print( intialDirection )
+player = Agent(maze, intialDirection)
 solved = player.go()
 
 directions = player.getDirections()

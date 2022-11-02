@@ -6,10 +6,10 @@ class Player(object):
 	cardinal = None
 	_directions = list()
 
-	def __init__(self, maze ):
+	def __init__(self, maze, intial):
 		self.maze = maze
 		self.location = None
-		self.cardinal = const.SOUTH
+		self.cardinal = intial
 	
 	def _moveForward(self):
 		self._jump( const.Move[self.cardinal] )
@@ -42,8 +42,8 @@ class Player(object):
 
 class Agent(Player):
 
-	def __init__(self, maze ):
-		super().__init__(maze)
+	def __init__(self, maze, intial):
+		super().__init__(maze, intial)
 	
 	def getDirections(self):
 		return self._directions
@@ -57,6 +57,7 @@ class Agent(Player):
 			if self.isStart():
 				print("No way out")
 				return False
+			# check right first	
 			if self.__check_Right():
 				self._goRight()
 				

@@ -4,14 +4,14 @@ import const
 class Block(pygame.sprite.Sprite):
 	"""This class represents the bar at the bottom that the player controls """
  
-	def __init__(self, x, y, mazeWidth, height, color):
+	def __init__(self, x, y, width, height, color):
 		""" Constructor function """
  
 		# Call the parent's constructor
 		super().__init__()
  
 		# Make a BLUE wall, of the size specified in the parameters
-		self.image = pygame.Surface([mazeWidth, height])
+		self.image = pygame.Surface([width, height])
 		self.image.fill(color)
  
 		# Make our top-left corner the passed-in location.
@@ -31,29 +31,29 @@ class Room(object):
 	cell_Width = None
 	cell_Height = None
 
-	def __init__(self, Maze, Path = []):
+	def __init__(self, maze):
 		""" Constructor, create our lists. """
 		self.wall_list = pygame.sprite.Group()
 		self.solution_list = pygame.sprite.Group()
 		
-		mazeWidth, mazeHight = Maze.getMatrix().shape
+		mazeWidth, mazeHeight = maze.getMatrix().shape
 		
 		self.cell_Width = const.Screen_Width // mazeWidth
-		self.cell_Height = const.Screen_Height // mazeHight
+		self.cell_Height = const.Screen_Height // mazeHeight
 		
-		matrix = Maze.getMatrix()
+		matrix = maze.getMatrix()
 
-		for y in range(mazeHight):
-			for x in range(mazeWidth):
-				if matrix[y][x] == 1 :
-					block = Block( x*self.cell_Width, y*self.cell_Height, self.cell_Width, self.cell_Height, const.BLACK )
+		for row in range(mazeHeight):
+			for col in range(mazeWidth):
+				if matrix[row][col] == const.FULL :
+					block = Block( col*self.cell_Width, row*self.cell_Height, self.cell_Width, self.cell_Height, const.BLACK )
 					self.wall_list.add(block)
 
 	def addPath(self, path):
 		pW = self.cell_Width *.1
 		pH = self.cell_Height *.1
-		for loc in path:
-			block = Block( loc[1]*self.cell_Width +pW, loc[0]*self.cell_Height +pW, self.cell_Width -pW*2, self.cell_Height -pW*2, const.GREEN )
+		for position in path:
+			block = Block( position[1]*self.cell_Width + pW, position[0]*self.cell_Height + pH, self.cell_Width - pW*2, self.cell_Height - pH*2, const.GREEN )
 			self.solution_list.add(block)
 
 class App(object):
